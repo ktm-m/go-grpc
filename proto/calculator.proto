@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "gender.proto";
+import "google/protobuf/timestamp.proto"; // to use timestamp
+
+package services;
+option go_package = "./services";
+
+service Calculator {
+  rpc Hello(HelloRequest) returns(HelloResponse);
+  rpc Fibonacci(FibonacciRequest) returns(stream FibonacciResponse); // streaming response
+  rpc Average(stream AverageRequest) returns(AverageResponse);
+  rpc Sum(stream SumRequest) returns(stream SumResponse);
+}
+
+message HelloRequest {
+  string name = 1; // need define tag, tag started from 1, name use tag 1
+  // shouldn't update data type, if you want to change make new field
+  // reserved: use to reserved tag or field name, after reserved can't add filed it include reserved tag and name
+  google.protobuf.Timestamp created_date = 2;
+}
+
+message HelloResponse {
+  string result = 1;
+}
+
+message Person {
+  string name = 1;
+  int64 age = 2; // sint32, sint64 is better than int32, int64 when value is negative
+  float weight = 3; // float32
+  double height = 4; // float64
+  bool active = 5;
+  repeated string phone_number = 6; // []string
+  Gender gender = 7;
+  map<string, string> countries = 8; // map[string]string
+  google.protobuf.Timestamp created_date = 9; // *timestamppb.Timestamp
+}
+
+message FibonacciRequest {
+  uint32 n = 1;
+}
+
+message FibonacciResponse {
+  uint32 result = 1;
+}
+
+message AverageRequest {
+  double number = 1;
+}
+
+message AverageResponse {
+  double result = 1;
+}
+
+message SumRequest {
+  int32 number = 1;
+}
+
+message SumResponse {
+  int32 result = 1;
+}
